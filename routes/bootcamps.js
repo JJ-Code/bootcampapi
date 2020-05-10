@@ -1,13 +1,21 @@
 const express = require('express');
-const { getBootcamp, getBootcamps, createBootcamp, updateBootcamp, deleteBootcamp} = require('../controllers/bootcamps')
+const Bootcamp = require('../models/Bootcamp');
+const {
+  getBootcamp,
+  getBootcamps,
+  getBootcampsInRadius,
+  createBootcamp,
+  updateBootcamp,
+  deleteBootcamp,
+} = require('../controllers/bootcamps');
+
 const router = express.Router();
-const Bootcamp = require('../models/Bootcamp')
+
+//route for finding all the bootcampw within a certain radius
+router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 
 //express router grabing routes path from mount routers
-router
-  .route('/')
-  .get(getBootcamps)
-  .post(createBootcamp);
+router.route('/').get(getBootcamps).post(createBootcamp);
 
 router
   .route('/:id')
@@ -15,16 +23,7 @@ router
   .put(updateBootcamp)
   .delete(deleteBootcamp);
 
-
-
 module.exports = router;
-
-
-
-
-
-
-
 
 // this in server.js app.use('/api/v1/bootcamps', bootcamps) means the path can be deleted here
 
@@ -35,7 +34,6 @@ module.exports = router;
 // router.get('/api/v1/bootcamps/:id', (req, res) => {
 //   res.status(200).json({ success: true, msg: `get bootcamp ${req.params.id}` });
 // });
-
 
 // router.post('/api/v1/bootcamps', (req, res) => {
 //   res.status(200).json({ success: true, msg: 'create new bootcamp' });
@@ -48,4 +46,3 @@ module.exports = router;
 // router.delete('/api/v1/bootcamps/:id', (req, res) => {
 //   res.status(200).json({ success: true, msg: `delete bootcamp ${req.params.id}` });
 // });
-
