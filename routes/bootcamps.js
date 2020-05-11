@@ -1,5 +1,4 @@
 const express = require('express');
-const Bootcamp = require('../models/Bootcamp');
 const {
   getBootcamp,
   getBootcamps,
@@ -9,6 +8,14 @@ const {
   deleteBootcamp,
   bootcampPhotoUpload
 } = require('../controllers/bootcamps');
+const Bootcamp = require('../models/Bootcamp');
+
+//pagination aka querying hooks
+const advancedResults = require('../middleware/advancedResults');
+
+//Auth valitated methods with tokens
+const { protect, authorize } = require('../middleware/auth');
+
 
 //Include other resource routers to access url path by /bootcamps/5d713995b721c3bb38c1f5d0/courses/
 const courseRouter = require('./courses')
@@ -24,21 +31,33 @@ router.use('/:bootcampId/courses', courseRouter);
 
 //route to upload a photo 
 router
-  .route('/:id/photo').put(bootcampPhotoUpload);
-// .put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
+  .route('/:id/photo')
+  .put(protect, bootcampPhotoUpload);
+
+//.put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
 
 
 //route for finding all the bootcampw within a certain radius
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 
 //express router grabing routes path from mount routers
-router.route('/').get(getBootcamps).post(createBootcamp);
+//advancedResults(model, populate associated)
+router
+  .route('/')
+  .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
+  .post(protect, createBootcamp);
+//.post(protect, authorize('publisher', 'admin'), createBootcamp);
+// .post(createBootcamp);
 
 router
   .route('/:id')
   .get(getBootcamp)
-  .put(updateBootcamp)
-  .delete(deleteBootcamp);
+  .put(protect, updateBootcamp)
+  .delete(protect, deleteBootcamp)
+// .put(protect, authorize('publisher', 'admin'), updateBootcamp)
+// .delete(protect, authorize('publisher', 'admin'), deleteBootcamp)
+// .put(updateBootcamp)
+// .delete(deleteBootcamp);
 
 module.exports = router;
 

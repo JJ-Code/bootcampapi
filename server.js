@@ -3,7 +3,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors'); //makes console.og different colors
-const fileupload = require('express-fileupload')
+const fileupload = require('express-fileupload');
+const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error')
 const connectDB = require('./config/db');
 
@@ -18,6 +19,10 @@ connectDB();
 //Routes files
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
+const auth = require('./routes/auth');
+// const users = require('./routes/users');
+// const reviews = require('./routes/reviews');
+
 
 //initatlize express
 const app = express();
@@ -25,6 +30,9 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 
 //own custom logs req to terminal must before mount router
@@ -44,6 +52,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Mount routers
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/auth', auth);
+// app.use('/api/v1/users', users);
+// app.use('/api/v1/reviews', reviews);
+
+
 
 //Error handling is linear needs to be after mount routers
 app.use(errorHandler);
