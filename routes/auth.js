@@ -2,8 +2,8 @@ const express = require('express');
 const {
   register,
   login,
-  getMe
-
+  getMe, 
+forgotPassword
 } = require('../controllers/auth');
 //Auth valitated methods with tokens
 const { protect, authorize } = require('../middleware/auth');
@@ -20,7 +20,7 @@ router.post('/login', login);
 router.get('/me', protect, getMe);
 // router.put('/updatedetails', protect, updateDetails);
 // router.put('/updatepassword', protect, updatePassword);
-// router.post('/forgotpassword', forgotPassword);
+router.post('/forgotpassword', forgotPassword);
 // router.put('/resetpassword/:resettoken', resetPassword);
 
 module.exports = router;
