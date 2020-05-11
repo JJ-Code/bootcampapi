@@ -32,9 +32,7 @@ router.use('/:bootcampId/courses', courseRouter);
 //route to upload a photo 
 router
   .route('/:id/photo')
-  .put(protect, bootcampPhotoUpload);
-
-//.put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
+  .put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
 
 
 //route for finding all the bootcampw within a certain radius
@@ -45,17 +43,14 @@ router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 router
   .route('/')
   .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
-  .post(protect, createBootcamp);
-//.post(protect, authorize('publisher', 'admin'), createBootcamp);
+  .post(protect, authorize('publisher', 'admin'), createBootcamp);
 // .post(createBootcamp);
 
 router
   .route('/:id')
   .get(getBootcamp)
-  .put(protect, updateBootcamp)
-  .delete(protect, deleteBootcamp)
-// .put(protect, authorize('publisher', 'admin'), updateBootcamp)
-// .delete(protect, authorize('publisher', 'admin'), deleteBootcamp)
+  .put(protect, authorize('publisher', 'admin'), updateBootcamp)
+  .delete(protect, authorize('publisher', 'admin'), deleteBootcamp)
 // .put(updateBootcamp)
 // .delete(deleteBootcamp);
 

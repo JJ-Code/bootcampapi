@@ -38,7 +38,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Grant access to specific roles
+// Grant access to specific roles can pass the roles (aka publisher or user) in the routes file
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
