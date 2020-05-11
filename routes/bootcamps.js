@@ -7,9 +7,26 @@ const {
   createBootcamp,
   updateBootcamp,
   deleteBootcamp,
+  bootcampPhotoUpload
 } = require('../controllers/bootcamps');
 
+//Include other resource routers to access url path by /bootcamps/5d713995b721c3bb38c1f5d0/courses/
+const courseRouter = require('./courses')
+
+
+
 const router = express.Router();
+
+// Re-route into other resource routers like courses.js
+router.use('/:bootcampId/courses', courseRouter);
+// router.use('/:bootcampId/reviews', reviewRouter);
+
+
+//route to upload a photo 
+router
+  .route('/:id/photo').put(bootcampPhotoUpload);
+// .put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
+
 
 //route for finding all the bootcampw within a certain radius
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
