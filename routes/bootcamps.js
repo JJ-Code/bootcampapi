@@ -19,14 +19,14 @@ const { protect, authorize } = require('../middleware/auth');
 
 //Include other resource routers to access url path by /bootcamps/5d713995b721c3bb38c1f5d0/courses/
 const courseRouter = require('./courses')
-
+const reviewRouter = require('./reviews')
 
 
 const router = express.Router();
 
 // Re-route into other resource routers like courses.js
 router.use('/:bootcampId/courses', courseRouter);
-// router.use('/:bootcampId/reviews', reviewRouter);
+router.use('/:bootcampId/reviews', reviewRouter);
 
 
 //route to upload a photo 
